@@ -1,11 +1,11 @@
-const { Configuration, OpenAI } = require('openai');
+const { Configuration, OpenAIApi } = require("openai");
 require('dotenv').config();
 
 const configuration = new Configuration({
-  apiKey: process.env.OPENAI_API_KEY,
+    apiKey: process.env.OPENAI_API_KEY,
 });
 
-const openai = new OpenAI(configuration);
+const openai = new OpenAIApi(configuration);
 
 async function askGPT(prompt) {
   try {
