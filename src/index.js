@@ -1,6 +1,6 @@
 const client = require('./client');
-const weatherResponse = require('./weather');
-const gptResponse = require('./openai');
+const weatherResponse = require('./cmds/weather');
+const gptResponse = require('./cmds/openai');
 
 client.on('message_create', async (message) => {
   if (message.body.startsWith('/ask')) {
