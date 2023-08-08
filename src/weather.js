@@ -10,7 +10,7 @@ async function getWeather(city) {
     );
     const data = response.data;
     const cityResponse = `${data.location.name}, ${data.location.region}, ${data.location.country}`;
-    return `${cityResponse}\nCondición: ${data.current.condition.text}\nTemperatura actual: ${data.current.temp_c}°C\nTemperatura máxima: ${data.forecast.forecastday[0].day.maxtemp_c}°C\nTemperatura mínima: ${data.forecast.forecastday[0].day.mintemp_c}°C`;
+    return `${cityResponse}\n${data.current.condition.text}\nAhora: ${data.current.temp_c}°C\nMax: ${data.forecast.forecastday[0].day.maxtemp_c}°C\nMin: ${data.forecast.forecastday[0].day.mintemp_c}°C`;
   } catch (error) {
     return `No se pudo obtener el clima de ${city}`;
   }
