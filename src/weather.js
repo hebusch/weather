@@ -16,7 +16,7 @@ async function getWeather(city) {
   }
 }
 
-async function weatherResponse(message){
+async function weatherResponse(message, client){
   const parts = message.body.split(' ');
   if (parts.length < 2) {
     return;

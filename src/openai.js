@@ -20,7 +20,7 @@ async function askGPT(prompt) {
   }
 }
 
-async function gptResponse(message) {
+async function gptResponse(message, client) {
   try {
     const parts = message.body.split(' ');
     if (parts.length < 2) {
