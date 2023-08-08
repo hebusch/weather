@@ -13,11 +13,9 @@ async function askGPT(prompt) {
       model: "gpt-3.5-turbo",
       messages: [{ role: "user", content: prompt }],
     });
-  
-    return chatCompletion;  
+    return chatCompletion.data.choices[0].message.content;  
   } catch (error) {
-    console.log(error);
-    return "Hubo un error.";
+    return "No se ha podido procesar la solicitud.";
   }
 }
 
