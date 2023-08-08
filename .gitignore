@@ -1,0 +1,7 @@
+node_modules/
+.wwebjs_cache/
+.vscode/
+dist/
+.wwebjs_auth/
+.env
+.env.local
