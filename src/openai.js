@@ -16,6 +16,7 @@ async function askGPT(prompt) {
   
     return chatCompletion;  
   } catch (error) {
+    console.log(error);
     return "Hubo un error.";
   }
 }
