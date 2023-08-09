@@ -3,51 +3,35 @@ const weatherResponse = require('./cmds/weather');
 const { gptResponse, gptImage } = require('./cmds/openai');
 const fastq = require('fastq');
 
-function taskHandler(message, cb) {
-  console.log('Procesando mensaje:', message.body);
-
+function taskHandler(message) {
   if (message.body.toLowerCase().startsWith('/ask')) {
-    gptResponse(message, client)
-      .then(() => {
-        console.log('gptResponse procesado con éxito.');
-        cb();
-      })
+    return gptResponse(message, client)
       .catch(error => {
         console.error('Error en gptResponse:', error);
-        cb(error);
+        throw error;
       });
   } 
-  else if (message.body.toLowerCase().startsWith('/img')) {
-    gptImage(message, client)
-      .then(() => {
-        console.log('gptImage procesado con éxito.');
-        cb();
-      })
+  else if (message.body.toLocaleLowerCase().startsWith('/img')) {
+    return gptImage(message, client)
       .catch(error => {
         console.error('Error en gptImage:', error);
-        cb(error);
+        throw error;
       });
   } 
   else if (message.body.toLowerCase().startsWith('weather')) {
-    weatherResponse(message, client)
-      .then(() => {
-        console.log('weatherResponse procesado con éxito.');
-        cb();
-      })
+    return weatherResponse(message, client)
       .catch(error => {
         console.error('Error en weatherResponse:', error);
-        cb(error);
+        throw error;
       });
   } 
   else {
-    console.log('Mensaje no reconocido:', message.body);
-    cb();
+    return Promise.resolve();
   }
 }
 
-const queue = fastq.promise(taskHandler, 1);
+const queue = fastq.promise(taskHandler, 3);
 
 client.on('message_create', async (message) => {
-  console.log('Mensaje recibido:', message.body);
   queue.push(message);
 });
