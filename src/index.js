@@ -3,30 +3,18 @@ const weatherResponse = require('./cmds/weather');
 const { gptResponse, gptImage } = require('./cmds/openai');
 const fastq = require('fastq');
 
-function taskHandler(message) {
-  if (message.body.toLowerCase().startsWith('/ask')) {
-    return gptResponse(message, client)
-      .catch(error => {
-        console.error('Error en gptResponse:', error);
-        throw error;
-      });
-  } 
-  else if (message.body.toLocaleLowerCase().startsWith('/img')) {
-    return gptImage(message, client)
-      .catch(error => {
-        console.error('Error en gptImage:', error);
-        throw error;
-      });
-  } 
-  else if (message.body.toLowerCase().startsWith('weather')) {
-    return weatherResponse(message, client)
-      .catch(error => {
-        console.error('Error en weatherResponse:', error);
-        throw error;
-      });
-  } 
-  else {
-    return Promise.resolve();
+async function taskHandler(message) {
+  try {
+    if (message.body.toLowerCase().startsWith('/ask')) {
+      await gptResponse(message, client);
+    } else if (message.body.toLocaleLowerCase().startsWith('/img')) {
+      await gptImage(message, client);
+    } else if (message.body.toLowerCase().startsWith('weather')) {
+      await weatherResponse(message, client);
+    }
+  } catch (error) {
+    console.error('Error en taskHandler:', error);
+    throw error;
   }
 }
 
