@@ -1,7 +1,7 @@
 const client = require('./client');
 const weatherResponse = require('./cmds/weather');
 const gptResponse = require('./cmds/openai');
-const horoscopeResponse = require('./cmds/horoscopo');
+// const horoscopeResponse = require('./cmds/horoscopo');
 
 client.on('message_create', async (message) => {
   if (message.body.toLowerCase().startsWith('/ask')) {
@@ -12,7 +12,7 @@ client.on('message_create', async (message) => {
     await weatherResponse(message, client);
   }
 
-  if (message.body.toLowerCase().startsWith('/horoscopo')) {
-    await horoscopeResponse(message, client);
-  }
+  // if (message.body.toLowerCase().startsWith('/horoscopo')) {
+  //   await horoscopeResponse(message, client);
+  // }
 });
