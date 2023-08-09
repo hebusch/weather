@@ -4,7 +4,7 @@ const gptResponse = require('./cmds/openai');
 const horoscopeResponse = require('./cmds/horoscopo');
 
 client.on('message_create', async (message) => {
-  if (message.body.startsWith('/ask')) {
+  if (message.body.toLowerCase().startsWith('/ask')) {
     await gptResponse(message, client);
   }
 
