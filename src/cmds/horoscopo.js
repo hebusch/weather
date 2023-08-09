@@ -1,4 +1,6 @@
 const axios = require('axios');
+const translateText = require('../utils/translate');
+require('dotenv').config();
 
 function todayDate() {
   const date = new Date();
@@ -32,13 +34,19 @@ async function horoscopeResponse(message, client) {
       return;
     }
     const sign = parts[1];
-    const response = await getHoroscope(sign);
+    const translatedSign = await translateText(sign, 'es', 'en');
+    const response = await getHoroscope(translatedSign);
+    const description = await translateText(response.description, 'en', 'es');
+    const compatibility = await translateText(response.compatibility, 'en', 'es');
+    const mood = await translateText(response.mood, 'en', 'es');
+    const luckyNumber = response.lucky_number;
+    const msg = `🔮 ${description}\nCompatibilidad: ${compatibility}\nHumor: ${mood}\nNúmero de la suerte: ${luckyNumber} 🌟`;
     if (message.fromMe) {
-      client.sendMessage(message.to, response);    
+      client.sendMessage(message.to, msg);    
     } else {
       const chat = await message.getChat();
       const contact = await message.getContact();
-      await chat.sendMessage(`@${contact.id.user}, ${response}`, {
+      await chat.sendMessage(`@${contact.id.user}\n${msg}`, {
           mentions: [contact]
       });    
     }

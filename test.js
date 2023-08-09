@@ -1,4 +1,5 @@
 const axios = require('axios');
+const translateText = require('./src/utils/translate');
 require('dotenv').config();
 
 function todayDate() {
@@ -22,8 +23,28 @@ async function getHoroscope(sign) {
     return response.data;
   } catch (error) {
     console.log(error);
-    return "No se ha podido procesar la solicitud.";
+    throw new Error("No se ha podido procesar la solicitud.");
   }
 }
 
-getHoroscope('aries').then(data => console.log(data));
+async function horoscopeResponse(message) {
+  try {
+    const parts = message.split(' ');
+    if (parts.length < 2) {
+      return;
+    }
+    const sign = parts[1];
+    const translatedSign = await translateText(sign, 'es', 'en');
+    const response = await getHoroscope(translatedSign);
+    const description = await translateText(response.description, 'en', 'es');
+    const compatibility = await translateText(response.compatibility, 'en', 'es');
+    const mood = await translateText(response.mood, 'en', 'es');
+    const luckyNumber = response.lucky_number;
+    const msg = `@Heinz Busch\n🔮 ${description}\nCompatibilidad: ${compatibility}\nHumor: ${mood}\nNúmero de la suerte: ${luckyNumber} 🌟`;
+    return msg;
+  } catch (error) {
+    console.log(error); 
+  }
+}
+
+horoscopeResponse('/horoscopo sagitario').then(data => console.log(data));
