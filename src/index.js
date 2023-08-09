@@ -3,7 +3,6 @@ const weatherResponse = require('./cmds/weather');
 const { gptResponse, gptImage } = require('./cmds/openai');
 const fastq = require('fastq');
 
-// Función de trabajo para la cola
 function taskHandler(message, cb) {
   if (message.body.toLowerCase().startsWith('/ask')) {
     gptResponse(message, client).then(() => cb()).catch(error => {
@@ -25,7 +24,6 @@ function taskHandler(message, cb) {
   }
 }
 
-// Crea la cola con un worker y concurrencia 1
 const queue = fastq.promise(taskHandler, 1);
 
 client.on('message_create', async (message) => {
