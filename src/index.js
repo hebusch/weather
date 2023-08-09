@@ -1,15 +1,19 @@
 const client = require('./client');
 const weatherResponse = require('./cmds/weather');
-const gptResponse = require('./cmds/openai');
+const { gptResponse, gptImage } = require('./cmds/openai');
 // const horoscopeResponse = require('./cmds/horoscopo');
 
 client.on('message_create', async (message) => {
   if (message.body.toLowerCase().startsWith('/ask')) {
-    await gptResponse(message, client);
+    gptResponse(message, client).catch(error => console.error('Error in gptResponse:', error));
+  }
+
+  if (message.body.toLocaleLowerCase().startsWith('/img')) {
+    gptImage(message, client).catch(error => console.error('Error in gptImage:', error));
   }
 
   if (message.body.toLowerCase().startsWith('weather')) {
-    await weatherResponse(message, client);
+    weatherResponse(message, client).catch(error => console.error('Error in weatherResponse:', error));
   }
 
   // if (message.body.toLowerCase().startsWith('/horoscopo')) {

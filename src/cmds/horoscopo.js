@@ -9,14 +9,15 @@ function todayDate() {
   return `${month}-${day}-${year}`;
 }
 
+// WIP.
 async function getHoroscope(sign) {
   try {
     const date = todayDate();
     const url = `https://us-central1-tf-natal.cloudfunctions.net/horoscopeapi_test?sign=${sign}&date=${date}`;
     const response = await axios.get(url);
     console.log(response.data);
-    return 'a';
   } catch (error) {
+    console.log(error);
     return "No se ha podido procesar la solicitud.";
   }
 }

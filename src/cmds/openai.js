@@ -1,4 +1,5 @@
 const { Configuration, OpenAIApi } = require("openai");
+const { MessageMedia } = require('whatsapp-web.js');
 require('dotenv').config();
 
 const configuration = new Configuration({
@@ -6,6 +7,20 @@ const configuration = new Configuration({
 });
 
 const openai = new OpenAIApi(configuration);
+
+async function generateImage(prompt) {
+  try {
+    const response = await openai.createImage({
+      prompt: prompt,
+      n: 1,
+      size: "1024x1024",
+    });
+    return response.data.data[0].url;
+  } catch (error) {
+    console.error('Error generating image: ', error);
+    return "No se ha podido procesar la solicitud.";
+  }
+}
 
 async function askGPT(prompt) {
   try {
@@ -16,6 +31,30 @@ async function askGPT(prompt) {
     return chatCompletion.data.choices[0].message.content;  
   } catch (error) {
     return "No se ha podido procesar la solicitud.";
+  }
+}
+
+async function gptImage(message, client) {
+  try {
+    const parts = message.body.split(' ');
+    if (parts.length < 2) {
+      return;
+    }
+    const prompt = parts.slice(1).join(' ');
+    const response = await generateImage(prompt);
+    const media = await MessageMedia.fromUrl(response);
+    if (message.fromMe) {
+      client.sendMessage(message.to, media);
+    } else {
+      const chat = await message.getChat();
+      const contact = await message.getContact();
+      await chat.sendMessage(media, { 
+        caption: `@${contact.id.user}`,
+        mentions: [contact],
+      });
+    }
+  } catch (error) {
+    console.log(error);
   }
 }
 
@@ -41,4 +80,4 @@ async function gptResponse(message, client) {
   }
 }
 
-module.exports = gptResponse; 
+module.exports = { gptResponse, gptImage };
