@@ -14,7 +14,7 @@ services:
       - "3000:3000"
     networks:
       - npm-network
-    mem_limit: 500m
+    mem_limit: 612m
 
 networks:
   npm-network:
