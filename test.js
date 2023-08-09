@@ -1,4 +1,5 @@
 const axios = require('axios');
+require('dotenv').config();
 
 function todayDate() {
   const date = new Date();
@@ -25,26 +26,4 @@ async function getHoroscope(sign) {
   }
 }
 
-async function horoscopeResponse(message, client) {
-  try {
-    const parts = message.body.split(' ');
-    if (parts.length < 2) {
-      return;
-    }
-    const sign = parts[1];
-    const response = await getHoroscope(sign);
-    if (message.fromMe) {
-      client.sendMessage(message.to, response);    
-    } else {
-      const chat = await message.getChat();
-      const contact = await message.getContact();
-      await chat.sendMessage(`@${contact.id.user}, ${response}`, {
-          mentions: [contact]
-      });    
-    }
-  } catch (error) {
-    console.log(error); 
-  }
-}
-
-module.exports = horoscopeResponse;
+getHoroscope('aries').then(data => console.log(data));
