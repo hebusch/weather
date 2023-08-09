@@ -6,7 +6,7 @@ services:
       context: .
       dockerfile: Dockerfile
     container_name: whatsapp-bot
-    restart: unless-error
+    restart: unless-stopped
     volumes:
       - .:/usr/src/app
       - /usr/src/app/node_modules
