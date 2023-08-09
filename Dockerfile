@@ -6,12 +6,12 @@ RUN apt-get install -y gconf-service libgbm-dev libasound2 libatk1.0-0 libc6 lib
 
 WORKDIR /usr/src/app
 
-COPY package*.json ./
+COPY package*.json yarn.lock ./
 
-RUN npm install
+RUN yarn install
 
 COPY . .
 
 EXPOSE 3000
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]
