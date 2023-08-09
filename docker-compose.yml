@@ -12,3 +12,9 @@ services:
       - /usr/src/app/node_modules
     ports:
       - "3000:3000"
+    networks:
+      - npm-network
+
+networks:
+  npm-network:
+    external: true
