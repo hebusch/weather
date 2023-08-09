@@ -2,6 +2,21 @@ const axios = require('axios');
 const translateText = require('../utils/translate');
 require('dotenv').config();
 
+const validSigns = [
+  'aries',
+  'tauro',
+  'geminis',
+  'cancer',
+  'leo',
+  'virgo',
+  'libra',
+  'escorpio',
+  'sagitario',
+  'capricornio',
+  'acuario',
+  'piscis'
+];
+
 function todayDate() {
   const date = new Date();
   const day = String(date.getDate()).padStart(2, '0');
@@ -34,6 +49,18 @@ async function horoscopeResponse(message, client) {
       return;
     }
     const sign = parts[1];
+    if (!validSigns.includes(sign)) {
+      if (message.fromMe) {
+        client.sendMessage(message.to, 'El signo ingresado no es válido.');
+      } else {
+        const chat = await message.getChat();
+        const contact = await message.getContact();
+        await chat.sendMessage(`@${contact.id.user}\nEl signo ingresado no es válido.`, {
+            mentions: [contact]
+        });
+      }
+      return;
+    }
     const translatedSign = await translateText(sign, 'es', 'en');
     const response = await getHoroscope(translatedSign);
     const description = await translateText(response.description, 'en', 'es');
